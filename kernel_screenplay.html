@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KERNEL — Screenplay</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0f1e;
+    --page: #f5f0e8;
+    --cream-dark: #ede6d6;
+    --red: #b01c2e;
+    --red-dim: #7a1220;
+    --blue: #1a2a5e;
+    --blue-mid: #2d4a8a;
+    --blue-light: #4a6fb5;
+    --blue-pale: #c8d4f0;
+    --gold: #c8963c;
+    --gold-pale: #f0e4c8;
+    --rule: #c0b090;
+    --scene-bg: #0e1628;
+    --scene-text: #c8d4f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    color: var(--page);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ─────────────────────────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(176,28,46,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(26,42,94,0.5) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-rule {
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--red), transparent);
+    margin-bottom: 3rem;
+    animation: fadeIn 2s ease forwards;
+  }
+
+  .cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(5rem, 15vw, 11rem);
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--page);
+    text-transform: uppercase;
+    line-height: 1;
+    text-align: center;
+    animation: fadeUp 1.5s ease forwards;
+  }
+
+  .cover-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.5em;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    animation: fadeUp 2s ease 0.3s both;
+  }
+
+  .cover-arabic {
+    font-size: 2.5rem;
+    color: var(--red);
+    margin-top: 2.5rem;
+    letter-spacing: 0.1em;
+    animation: fadeUp 2s ease 0.6s both;
+    font-family: 'IM Fell English', serif;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 1px;
+    background: var(--rule);
+    margin: 2.5rem auto;
+    animation: fadeIn 2s ease 0.9s both;
+  }
+
+  .cover-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #8899cc;
+    text-align: center;
+    max-width: 440px;
+    line-height: 1.9;
+    animation: fadeUp 2s ease 1.1s both;
+  }
+
+  .cover-quote cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--blue-light);
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .cover-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: #445;
+    text-transform: uppercase;
+    animation: pulse 3s ease infinite;
+  }
+
+  /* ── PAGE LAYOUT ────────────────────────────────────────── */
+  .page {
+    background: var(--page);
+    color: var(--ink);
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 5rem 5rem 5rem 8rem;
+    position: relative;
+    box-shadow: 0 0 80px rgba(0,0,0,0.6);
+  }
+
+  .page-wrap {
+    background: var(--ink);
+    padding: 4rem 2rem;
+  }
+
+  /* ── ACT HEADERS ────────────────────────────────────────── */
+  .act-header {
+    background: var(--scene-bg);
+    border-left: 3px solid var(--red);
+    padding: 2.5rem 3rem 2rem;
+    margin: 0 -2rem 3rem;
+    position: relative;
+  }
+
+  .act-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.5rem;
+  }
+
+  .act-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--page);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ── SCENE HEADING ──────────────────────────────────────── */
+  .scene-heading {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin: 2.5rem 0 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .scene-heading.first {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  /* ── ACTION ─────────────────────────────────────────────── */
+  .action {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    line-height: 1.85;
+    color: #2a2010;
+    margin-bottom: 1rem;
+  }
+
+  .action em {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  /* ── CHARACTER + DIALOGUE ───────────────────────────────── */
+  .dialogue-block {
+    margin: 1.2rem 0 1.2rem 3rem;
+    max-width: 340px;
+  }
+
+  .character {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .parenthetical {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: #5a4a30;
+    margin: 0 0 0.2rem 1rem;
+  }
+
+  .line {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: #1a1008;
+  }
+
+  /* ── ARABIC INSET ───────────────────────────────────────── */
+  .arabic {
+    font-size: 1.4rem;
+    color: var(--red);
+    direction: rtl;
+    font-family: 'IM Fell English', Georgia, serif;
+  }
+
+  /* ── TITLE CARD ─────────────────────────────────────────── */
+  .title-card {
+    background: var(--ink);
+    color: var(--page);
+    padding: 2.5rem 3rem;
+    margin: 2rem -3rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    text-align: center;
+    border-top: 1px solid var(--red-dim);
+    border-bottom: 1px solid var(--red-dim);
+  }
+
+  .title-card cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-top: 1rem;
+  }
+
+  /* ── CUT / TRANSITION ───────────────────────────────────── */
+  .transition {
+    text-align: right;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--blue-mid);
+    margin: 1.5rem 0;
+  }
+
+  /* ── VISUAL INSERT ──────────────────────────────────────── */
+  .insert {
+    background: var(--cream-dark);
+    border-left: 3px solid var(--blue-mid);
+    padding: 0.8rem 1.2rem;
+    margin: 1rem 0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  /* ── SPECIAL VISUAL MOMENT ──────────────────────────────── */
+  .visual-beat {
+    text-align: center;
+    padding: 2rem 0;
+    margin: 1rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .visual-beat .arabic-large {
+    font-size: 4rem;
+    color: var(--red);
+    direction: rtl;
+    line-height: 1.2;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .visual-beat .transliteration {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--blue-mid);
+    letter-spacing: 0.2em;
+  }
+
+  .visual-beat .translation {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8a7050;
+    margin-top: 0.4rem;
+  }
+
+  /* ── DREAM SEQUENCE ─────────────────────────────────────── */
+  .dream-sequence {
+    background: #0a0f1e;
+    color: #c8d4f0;
+    padding: 2.5rem 3rem;
+    margin: 1.5rem -3rem;
+    border: 1px solid #1a2a5e;
+    position: relative;
+  }
+
+  .dream-sequence::before {
+    content: 'DREAM';
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--red-dim);
+    text-transform: uppercase;
+    font-family: 'Courier Prime', monospace;
+  }
+
+  .dream-sequence .action {
+    color: #8899cc;
+  }
+
+  .dream-sequence .scene-heading {
+    color: var(--scene-text);
+    border-top-color: #1a2a5e;
+  }
+
+  .dream-sequence .character {
+    color: #c8d4f0;
+  }
+
+  .dream-sequence .line {
+    color: #aabbd4;
+  }
+
+  /* ── END TITLE ──────────────────────────────────────────── */
+  .end-page {
+    background: var(--ink);
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .end-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(176,28,46,0.12) 0%, transparent 70%);
+  }
+
+  .end-rule {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+    margin: 0 auto 3rem;
+  }
+
+  .end-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--page);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  .end-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #8899cc;
+    max-width: 440px;
+    margin: 0 auto;
+    line-height: 1.9;
+  }
+
+  .end-quote cite {
+    display: block;
+    font-style: normal;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-top: 1rem;
+  }
+
+  /* ── ANIMATIONS ─────────────────────────────────────────── */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+  /* ── SCENE NUMBER MARKER ────────────────────────────────── */
+  .scene-num {
+    position: absolute;
+    left: 2.5rem;
+    font-size: 0.65rem;
+    font-family: 'Courier Prime', monospace;
+    color: var(--red-dim);
+    letter-spacing: 0.1em;
+    margin-top: 1.5rem;
+  }
+
+  /* ── SECTION SPACER ─────────────────────────────────────── */
+  .spacer {
+    height: 2rem;
+  }
+
+  /* ── SCROLL NAV ─────────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 100;
+  }
+
+  .nav a {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #334;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .nav a:hover { background: var(--red); transform: scale(1.6); }
+
+  @media (max-width: 700px) {
+    .page { padding: 3rem 1.5rem 3rem 1.5rem; }
+    .dialogue-block { margin-left: 1.5rem; }
+    .nav { display: none; }
+    .act-header { margin: 0 -1.5rem 2rem; }
+    .dream-sequence { margin: 1.5rem -1.5rem; }
+    .title-card { margin: 1.5rem -1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav" aria-label="Jump to act">
+  <a href="#cover" title="Cover"></a>
+  <a href="#act1" title="Act I"></a>
+  <a href="#act2" title="Act II"></a>
+  <a href="#act3" title="Act III"></a>
+  <a href="#act4" title="Act IV"></a>
+  <a href="#act5" title="Act V"></a>
+  <a href="#act6" title="Act VI"></a>
+  <a href="#act7" title="Act VII"></a>
+  <a href="#end" title="End"></a>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     COVER
+     ══════════════════════════════════════════════════════════ -->
+<section class="cover" id="cover">
+  <div class="cover-rule"></div>
+  <h1 class="cover-title">Kernel</h1>
+  <p class="cover-subtitle">A Short Film by Sarim Gillani</p>
+  <div class="cover-divider"></div>
+  <blockquote class="cover-quote">
+    "The conclusion of the philosopher is not the outcome of his reasoning.
+    On the contrary, his reasoning is the outcome of his conclusions."
+    <cite>— M. Rafiuddin</cite>
+  </blockquote>
+  <p class="cover-scroll">Scroll ↓</p>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     COLD OPEN
+     ══════════════════════════════════════════════════════════ -->
+<div class="page-wrap">
+<article class="page" id="act1">
+
+  <div class="act-header">
+    <p class="act-number">Cold Open</p>
+    <h2 class="act-title">Falaq - The Splitting (of Khajoor)</h2>
+  </div>
+
+  <p class="scene-heading first">EXT. CAMBRIDGE — DAWN</p>
+
+  <p class="action">EXTREME CLOSE-UP.</p>
+
+  <p class="action">Two hands hold a khajoor between them. The fingers find the seam. A pause. Then: it splits.</p>
+
+  <p class="action">The two halves fall open. At the centre: a smooth, dense kernel. Smaller than expected. Containing, somehow, everything.</p>
+
+  <p class="action">SILENCE — then the first sound: a bell from King's College Chapel, far across the river.</p>
+
+  <p class="action">Cambridge wakes. A punt moves on dark water. A bicycle wheel spinning — classic green cycle. A library door closing at the top of Girton. Wind through the Backs.</p>
+
+  <div class="title-card">
+    "The conclusion of the philosopher is not the outcome of his reasoning.<br>
+    On the contrary, his reasoning is the outcome of his conclusions."
+    <cite>— M. Rafiuddin</cite>
+  </div>
+
+  <p class="transition">SMASH CUT TO:</p>
+
+  <!-- ── ACT I ─────────────────────────────────────── -->
+  <div class="act-header" id="act1-header">
+    <p class="act-number">Act I</p>
+    <h2 class="act-title">Inteha - The Limit</h2>
+  </div>
+
+  <!-- SCENE 1 -->
+  <p class="scene-heading">INT. CAVENDISH LABORATORY — DATA ANALYSIS ROOM — NIGHT</p>
+
+  <p class="action">The screen fills with a map of the ancient sky. Not stars — something older. The <em>Cosmic Microwave Background</em>: the universe at 380,000 years of age, its residual heat rendered in colour. Amber and blue. The oldest light that exists. A portrait of the cosmos in the moment it first became transparent to itself.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/f7381818b86f3dacdc54308e583c427dc803e613/kernel%20cosmic.jpg" alt="cosmic Microwave Background" style="width:100%; margin:1.5rem 0;">
+
+  <p class="action">NABEEL, 24, sits before it. He has the still quality of someone who has spent years training himself to be still — and the restlessness of someone for whom that training has never quite worked.</p>
+
+  <p class="action">His desk: equations on yellow legal paper, three empty cups, a physics textbook open and abandoned. In the top right corner of his screen: an email notification. He has not opened it. It has been there for two hours.</p>
+
+  <p class="action">He pulls up a graph. A curve approaching a point. The singularity — the Planck epoch, the moment before which mathematics has no words. The curve terminates. There is nothing past it. This is where his thesis has lived for eight months, circling the same unanswerable question.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20singularity.JPG" alt="Singularity Graph" style="width:100%; margin:1.5rem 0;">
+
+  <p class="action">He stares at the termination point.</p>
+
+  <p class="action">He opens the email.</p>
+
+  <p class="action">We read it with him — close on screen, the cursor still blinking:</p>
+
+  <div class="insert">
+    Nabeel — The faculty committee has moved its meeting forward due to Dr. Wexler's schedule. You now have until Friday at midnight to submit the final chapter, or I will be forced to defer your candidature for the academic year. Come see me tomorrow morning, 10 AM. We need to talk about what you're actually submitting. — Huw
+  </div>
+
+  <p class="action">Nabeel reads it twice. Then looks at the whiteboard covering one entire wall. Equations so dense they've begun crowding the edges, spilling into the border.</p>
+
+  <p class="action">At the centre of the board: a gap. Four blank inches. Like a missing tooth.</p>
+
+  <div class="insert">INSERT — the gap in the whiteboard. White space.</div>
+  
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20gap.JPG" alt="Singularity Gap Graph" style="width:100%; margin:1.5rem 0;">
+
+  <p class="action">He looks at his phone.</p>
+
+  <p class="action">BABA. Three missed calls, across three weeks.</p>
+
+  <p class="action">He sets the phone face-down.</p>
+
+  <p class="action">He looks at the singularity on his screen until the screen goes dark from inactivity, and he is left looking at his own reflection in the glass.</p>
+
+  <p class="action">He turns to the whiteboard. Picks up a marker. Stands before the gap. Raises it. Does not write.</p>
+
+  <p class="action">He lowers the marker. Sets it down. Sits.</p>
+
+  <p class="action">Outside: the first grey light appears in the window.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 2 -->
+  <p class="scene-heading">INT. UNIVERSITY CENTRE PRAYER HALL — FRIDAY NOON</p>
+
+  <p class="action">Jummah. Rows of men standing, then kneeling. Post-prayer: JUNAYD stands at the front, leading dua. His voice is measured, unhurried. Around him, students with raised palms.</p>
+
+  <p class="action">At the back of the last row: JAMES. Hands raised like the others. But his jaw is tight. Something working behind his eyes.</p>
+
+  <p class="action">Junayd reaches a passage about the oppressed.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(in dua, quietly)</p>
+    <p class="line">...and ease the suffering of our brothers and sisters in Gaza and Palestine. Grant them patience. Grant them relief—</p>
+  </div>
+
+  <p class="action">James's hands drop. He speaks — too loud for this room.</p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">This is escapism.</p>
+  </div>
+
+  <p class="action">Every head turns. The Junayd stops. A hush that has weight.</p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="parenthetical">(quieter, but continuing)</p>
+    <p class="line">All these prayers, nothing changes. We need power. We need action. Stop putting it on God — where is God for the Palestinians?</p>
+  </div>
+
+  <p class="action">Silence. James has surprised even himself. This came from somewhere below the place where decisions are made.</p>
+
+  <p class="action">Junayd looks at James for a long moment. Then wipes his hands slowly down his face — the gesture that closes a prayer.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(quietly)</p>
+    <p class="line">Ameen.</p>
+  </div>
+
+  <p class="action">The dua is over. Men begin to move. James does not move.</p>
+
+  <p class="action">He sits alone in the last row as the hall empties around him. The overhead light hums. He looks at his hands. Open. Empty.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT II ────────────────────────────────────── -->
+  <div class="act-header" id="act2">
+    <p class="act-number">Act II</p>
+    <h2 class="act-title">Envy of the priceless pearl!</h2>
+  </div>
+
+  <!-- SCENE 3 -->
+  <p class="scene-heading first">EXT. CAMBRIDGE CENTRAL MOSQUE — EARLY MORNING — 5:50 AM</p>
+
+  <p class="action">The city before it remembers itself. Mist on the grass. The mosque's architecture moving through its morning sequence as the sun begins. Beautiful arches, tree canopy, gardens like an invitation.</p>
+
+  <p class="action">NABEEL walks with the purposeful blankness of someone who has not slept. He stops. He doesn't plan to stop. His feet simply stop.</p>
+
+  <p class="action">He looks at the mosque's face. Then pushes open the front door and goes in, carrying his shoes in his hands.</p>
+
+  <p class="action">He is surprised to see OMAR there. They register each other across the empty hall. Two young men from immigrant Muslim backgrounds, alone in a mosque before six in the morning. Neither there by accident. Neither there on purpose.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Such a pleasant surprise. Where have you been? What have you been up to?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="parenthetical">(with a grin)</p>
+    <p class="line">I was off doing Ice Dragon Boat Racing and snow ball fighting in China. Minus thirty degrees in Harbin.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">WHAT. That is crazy. I have so many questions but the most important one is — were you not taking classes?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Hmm. Yeah. That's the thing.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">What do you mean? What are you working on nowadays? Third year Maths, if I'm correct?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">I am glad I met you. I'm going back to Bradford in an hour. My dad needs someone in the business. I've been here long enough.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">You're quitting your degree? What happened?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">I'm not quitting anything. I'm going home.</p>
+  </div>
+
+  <p class="action">The distinction matters to Omar.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="parenthetical">(after a beat)</p>
+    <p class="line">Nothing happened. That's the problem. I came here because I loved mathematics — the actual thing. The shape of it. The way a proof feels when it lands. First year and a half it was still there. Then it went. I kept doing the work but the thing underneath it wasn't there anymore.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Could come back.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Maybe. But my dad's shop won't wait for maybe.</p>
+  </div>
+
+  <p class="action">A beat.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Forget about me. Tell me about yourself. How come you're awake so early?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I never slept. Thesis submission.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">The one on origins of the universe?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Yeah. I have until Friday midnight. I don't want to submit what I have.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">And the one you want to submit?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Isn't finished. And my supervisor thinks it can't be finished. And he might be right.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Is he?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">No. My framework is right. The geometry at the singularity — I've been approaching it spatially, like everything else, but if you treat the boundary not as a wall but as a—</p>
+  </div>
+
+  <p class="action">He stops himself.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">As a what.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">An opening. A different kind of geometry on the other side. Not where space begins — where space begins to be <em>possible</em>. Pre-geometric spacetime. It's not provable by the usual methods. But it's consistent. And it holds together in a way the safe version doesn't.</p>
+  </div>
+
+  <p class="action">He says this and then looks slightly surprised to have said it out loud, to anyone, in full.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">So mathematically that holds — but it doesn't correspond to anything you can measure. That's your problem.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Yes. Exactly.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Submit the safe one.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">You just said—</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">I said the framework is right. I didn't say you should blow up your PhD to submit it. Submit the safe one. Then in two years write this up properly and it'll change the field. That's how it's supposed to work.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">The safe one is a lie.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">It's incomplete. That's not the same as a lie.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">It presents the boundary as the conclusion. The boundary isn't the conclusion. The boundary is where the question starts.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">And what happens to the question if you lose your funding and have to go home?</p>
+  </div>
+
+  <p class="action">Silence.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="parenthetical">(quietly)</p>
+    <p class="line">Some things have to wait.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Is that what you told yourself?</p>
+  </div>
+
+  <p class="action">The question lands. Omar looks at him — not angry. With a directness that has something behind it.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">Yeah. It is.</p>
+  </div>
+
+  <p class="action">A long silence. Neither of them says anything more.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">You'll come back.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="line">To Cambridge? I doubt it. To mathematics — maybe. Eventually. In whatever form it takes.</p>
+  </div>
+
+  <p class="action">He holds his hand out. Nabeel shakes it — and then, unexpectedly, both of them allow it to become something slightly more than a handshake. The grip held a moment longer.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Omar</p>
+    <p class="parenthetical">(at the door — and then, a wink)</p>
+    <p class="line">Submit the real one.</p>
+  </div>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 4 -->
+  <p class="scene-heading">EXT. CAMBRIDGE STREETS — AFTERNOON</p>
+
+  <p class="action">TRACKING — James walks fast. HASSAN walks alongside, slightly slower. They are not from the same world and they both know it. </p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">Junayd told me to find you.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">I know. I heard what you said in the prayer hall.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">Was I wrong?</p>
+  </div>
+
+  <p class="action">Hassan thinks about this genuinely.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">You were loud.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="parenthetical">(frustrated)</p>
+    <p class="line">That's not an answer.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">People are trying to pray.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">People are dying.</p>
+  </div>
+
+  <p class="action">They walk in silence. A bicycle passes. Pigeons on the cobblestones.</p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">I boycott everything I can. I went to three marches. I wrote to my MP. Nothing. Nothing moves.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="parenthetical">(carefully)</p>
+    <p class="line">What were you expecting to happen?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">I don't know. Something.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">You know my father? He has an olive tree in the courtyard.</p>
+  </div>
+
+  <p class="action">A beat.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/Kernel%20Olive%20Tree.webp" alt="Olive Tree" style="width:100%; margin:1.5rem 0;">
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">He was told to leave the house. He said: I can't leave the tree. Israeli genociders made him leave anyway. But he said it.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">That's not enough.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">No. It isn't.</p>
+  </div>
+
+  <p class="action">A pause.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">But it's not nothing.</p>
+  </div>
+
+  <p class="action">He looks at James.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">You came into a mosque and shouted at God. That's not a political act, James. That's a personal one.</p>
+  </div>
+
+  <p class="action">James stops walking. Hassan stops too.</p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="parenthetical">(quietly)</p>
+    <p class="line">Then what do I do with it?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Hassan</p>
+    <p class="line">I don't know...</p>
+  </div>
+
+  <p class="action">They stand there. The conversation doesn't resolve. It deepens, instead.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT III ───────────────────────────────────── -->
+  <div class="act-header" id="act3">
+    <p class="act-number">Act III</p>
+    <h2 class="act-title">Guide Light?</h2>
+  </div>
+
+  <!-- SCENE 5 -->
+  <p class="scene-heading first">EXT. QUEENS' COLLEGE — THE MATHEMATICAL BRIDGE — DUSK</p>
+
+  <p class="action">ESTABLISHING — the wooden bridge over the Cam. A perfect arc of diagonals and tangents, each timber set at an exact angle to the next. From a distance it looks self-sufficient. Like reason holding itself together with no need for anything outside of it.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20mathematical-bridge.jpg" alt="Mathematical Bridge" style="width:100%; margin:1.5rem 0;">  
+
+  <p class="action">NABEEL and JUNAYD stand on the bridge. Below: dark water. Above: the first grey of evening. A punt drifts under them, nobody on it.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">They say Newton built it without bolts.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">That's not true.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">I know. But everyone wants it to be. Why?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="parenthetical">(simply)</p>
+    <p class="line">Because they want reason to be self-sufficient. Logic holding itself together with no need for anything outside of it.</p>
+  </div>
+
+  <p class="action">A beat. The water moves below them.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">And it can't.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">Is that why you went into physics?</p>
+  </div>
+
+  <p class="action">Nabeel looks at the water. The question lands differently than expected.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="parenthetical">(after a pause)</p>
+    <p class="line">My father reads poetry. Writes it, when he can. He drove a taxi for eighteen years. Came here from Lahore with nothing. He read to me every night when I was small. Urdu, mostly. Things I was too young to understand.</p>
+  </div>
+
+  <p class="action">A beat.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I chose equations instead.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">He was disappointed?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">He never said so. That's worse, somehow. I think he hoped I'd bring both. And I only brought one.</p>
+  </div>
+
+  <p class="action">Junayd leans on the railing. He doesn't rush to fill the silence.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">What's the progress with the gap in your proof? I made special dua for you today.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">There's a section of the derivation I can't close. The mathematics on both sides of the gap are consistent. I know the answer is right.</p>
+  </div>
+
+  <p class="action">A pause.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I just can't prove it.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">You know it's right.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I know it <em>feels</em> right.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(carefully, not pushing)</p>
+    <p class="line">And is that different?</p>
+  </div>
+
+  <p class="action">Nabeel goes still. The punt moves further downstream and disappears.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="parenthetical">(very quiet)</p>
+    <p class="line">In my field it is. You need the proof. Intuition without proof is—</p>
+  </div>
+
+  <p class="action">He searches for the word.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">It's poetry.</p>
+  </div>
+
+  <p class="action">A long silence.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(no edge to it)</p>
+    <p class="line">Is that the insult or the compliment?</p>
+  </div>
+
+  <p class="action">Nabeel doesn't answer. But something shifts.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 6 -->
+  <p class="scene-heading">INT. WREN LIBRARY, TRINITY COLLEGE — LATE AFTERNOON</p>
+
+  <p class="action">The library built by Christopher Wren. A long white room above a cloister. Lime wood bookcases. Proportions so precise that speaking feels presumptuous — as if the room has already said everything that can be said.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/Kernel%20Wren.jpg" alt="Wren" style="width:100%; margin:1.5rem 0;">
+
+  <p class="action">NABEEL and JUNAYD walk slowly. A librarian at the far end. Display cases: the intellectual inheritance of this small city, behind glass.</p>
+
+  <div class="insert">Newton's own copy of the Principia — pages dense with his handwriting.</div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(quietly)</p>
+    <p class="line">He spent more time on theology than on physics.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I know.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">Doesn't that bother you? That the man who built your entire framework spent the back half of his life looking for something it couldn't contain?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">He was looking for the same thing. The rule behind the rules.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">And did he find it?</p>
+  </div>
+
+  <p class="action">Nabeel doesn't answer.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">You know what the gap in your thesis reminds me of? Wittgenstein. The man who traced the limits of language.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">What did he say? At the end.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">He ended the Tractatus by saying: "Whereof one cannot speak, thereof one must be silent."</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">And he meant that as a limit.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">He meant it as honesty. You reach the edge of what language can carry. And then you stop.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Or the silence on the other side of that sentence is the most important part.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">Not "there is nothing beyond what language can say." Just — language can't take you there. You need a different vehicle.</p>
+  </div>
+
+  <p class="action">A long beat. The library around them — centuries of reason, every book a monument to what the thinking mind has built. And in the middle of it, two people who have, in their different ways, reached the same edge.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">Wanna walk towards the prayer room?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Sure.</p>
+  </div>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 7 -->
+  <p class="scene-heading">EXT. TRINITY COLLEGE — NEWTON TREE — DAY</p>
+
+  <p class="action">NABEEL cycling past Trinity stops because MINGCHAN is there, phone out, vlogging to himself in front of the famous apple tree.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20newton%20tree.webp" alt="Newton Tree" style="width:100%; margin:1.5rem 0;">
+
+  <div class="dialogue-block">
+    <p class="character">Mingchan</p>
+    <p class="parenthetical">(into camera, with total conviction)</p>
+    <p class="line">This is the tree where the apple fell on Newton and he discovered gravity.</p>
+  </div>
+
+  <p class="action">Nabeel slows. His expression says: that's not quite right. He opens his mouth. Mingchan doesn't notice and continues.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Mingchan</p>
+    <p class="line">And NOW — I am the coolest Chinese alive. I am waiting for an apple to fall on my head so I can discover something CRAAAZY.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">The apple didn't fall on his head. He saw it falling. And not over here.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Mingchan</p>
+    <p class="parenthetical">(gesturing impatiently)</p>
+    <p class="line">Bro. Focus on the apple. The APPLE.</p>
+  </div>
+
+  <p class="action">Mingchan hands Nabeel the phone. Nabeel holds it up, filming Mingchan standing under the tree, looking upward with absurd expectation.</p>
+
+  <p class="action">Nabeel smiles. Returns the camera.</p>
+
+  <p class="action">Before getting back on his bike, he reaches into his pocket. The khajoor kernel — the one from the very beginning — sits in his palm. He looks at it.</p>
+
+  <img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20splitting.png" alt="Kernel splitting" style="width:100%; margin:1.5rem 0;">
+  
+  <p class="action">VOICE OVER — Nabeel, barely above a whisper:</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="parenthetical">(V.O.)</p>
+    <p class="line">The seed doesn't need anyone to explain the tree to it.</p>
+  </div>
+
+  <p class="action">He closes his fist around it. Gets on his bike. Rides.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT IV ───────────────────────────────────── -->
+  <div class="act-header" id="act4">
+    <p class="act-number">Act IV</p>
+    <h2 class="act-title">Mere Drop of Blood?</h2>
+  </div>
+
+  <!-- SCENE 8 -->
+  <p class="scene-heading first">INT. NABEEL'S COLLEGE ROOM — VERY LATE NIGHT — 2 AM</p>
+
+  <p class="action">He is at his desk. The new framework open on his laptop. He has been working for hours — the evidence: six more empty cups, eight more pages of calculations, two fresh notebooks opened and filled.</p>
+
+  <p class="action">He stops.</p>
+
+  <p class="action">He opens his desk drawer. A slim book — Urdu poetry, the spine worn to softness. He opens it, reads a page silently. His lips don't move. His expression does — a slow unfastening of something he keeps locked.</p>
+
+  <p class="action">He closes it.</p>
+
+  <p class="action">He looks at his phone. BABA. Three missed calls. He picks it up. Puts it down.</p>
+
+  <p class="action">He gets up to make tea and sees, through his window, in the college common room across the courtyard: a light. Late for anyone to be there.</p>
+
+  <p class="action">He watches.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 9 -->
+  <p class="scene-heading">INT. COLLEGE COMMON ROOM — CONTINUOUS</p>
+
+  <p class="action">JUNAYD, alone. The room otherwise dark. He sits at one of the long tables with a sheet of white cartridge paper, a bottle of ink, and a broad-nibbed calligraphy pen.</p>
+
+  <p class="action">He is working slowly. Deliberately. Each stroke considered before it is made, then executed with the kind of commitment that has no undo.</p>
+
+  <p class="action">What he is making is in Arabic script. Large, unhurried, deeply intentional. The strokes are architectural: each letter a structure, each word a building.</p>
+
+  <p class="action">Camera holds on Junayd's hand moving across the page. The image slowly resolving. We will see it completed in a moment. For now we see only the making.</p>
+
+  <p class="action">The door opens. Nabeel. Junayd doesn't look up — he's in the middle of a stroke. Nabeel sits in a chair across the room without speaking and watches.</p>
+
+  <p class="action">The only sound: the faint drag of the nib on paper. The only light: one lamp over the table. Outside: Cambridge, asleep.</p>
+
+  <p class="action">Nabeel watches Junayd's hand. The patient construction of something that takes this long, that cannot be rushed, that has no equivalent in calculus or proof — where the beauty of the thing and the making of the thing are the same act.</p>
+
+  <p class="action">Junayd lifts his pen. Sets it down. Sits back and looks at what he's made.</p>
+
+  <p class="action">Now we see it:</p>
+
+  <div class="visual-beat">
+    <span class="arabic-large">فَلَق</span>
+    <p class="transliteration">Falaq</p>
+    <p class="translation">The Splitting</p>
+  </div>
+
+  <p class="action">The camera holds on it for three full seconds. Then Junayd looks up.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(without surprise)</p>
+    <p class="line">How long have you been there?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">A while.</p>
+  </div>
+
+  <p class="action">Both look at the paper.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">What does it mean?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">The splitting. It's what happens when something that was closed — opens. A breaking, but more like a becoming.</p>
+  </div>
+
+  <p class="action">Nabeel stares at the word. The expression of a man who has just heard described, in three syllables, the thing he has been building equations around for three years.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">I do this when I can't sleep. My grandfather taught me. He said writing is the only thing that makes thought physical. Forces it to commit.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Why that word?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="parenthetical">(simply)</p>
+    <p class="line">You can't be the only one thinking about the start of the universe.</p>
+  </div>
+
+  <p class="action">A long silence. The ink still slightly wet, catching the light.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">And this is for you.</p>
+  </div>
+
+  <p class="action">He pushes the calligraphy across the table. Nabeel looks at it. Goes to say something, doesn't. Junayd insists silently. Nabeel accepts.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 10 -->
+  <p class="scene-heading">EXT. GIRTON'S COLLEGE GARDEN — EVENING</p>
+
+<p class="action">WIDE — James and Hassan sit on a bench. Everything else is going dark.</p>
+
+<p class="action">They have been sitting a while. The conversation has moved past politics into something quieter.</p>
+
+<img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20girton.png" alt="Girton College Garden" style="width:100%; margin:1.5rem 0;">
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">What was the tree called?</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">We just called it the olive tree.</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Did it produce olives?</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="parenthetical">(slight smile)</p>
+  <p class="line">Not especially. My mother said it was decorative.</p>
+  <p class="parenthetical">(pause)</p>
+  <p class="line">My father said everything with roots is decorative.</p>
+</div>
+
+<p class="action">JAMES sits with this.</p>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Do you pray?</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">Yes.</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Does it help?</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="parenthetical">(honest)</p>
+  <p class="line">Always. But only sometimes in the way people expect it to.</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Then why—</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">Because prayer is not only for a result here.</p>
+</div>
+
+<p class="action">James looks at the garden.</p>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">I think I shouted because I feel He isn't there?</p>
+</div>
+
+<p class="action">Silence.</p>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">I know.</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Does that bother you? That I—</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">No. It’s very important to not only argue but fight all the gods. Abraham did that. It's an old tradition. And then he was able to find his God.</p>
+</div>
+
+<p class="action">James almost laughs. Doesn't quite.</p>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">What do you think I can do?</p>
+</div>
+
+<p class="action">Hassan thinks. A real answer.</p>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">Use your resources as much as you can: write something. Teach someone. But most importantly, remember the olive tree next time someone says there's nothing left.</p>
+  <p class="parenthetical">(quiet)</p>
+  <p class="line">We don't need more noise. We have enough noise.</p>
+  <p class="line">And wish that when I join my family members, I am as successful as them.</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">JAMES</p>
+  <p class="line">Ohh, they’re in Gaza?</p>
+</div>
+
+<div class="dialogue-block">
+  <p class="character">HASSAN</p>
+  <p class="line">They are not alive.</p>
+</div>
+
+<p class="action">James nods. Slowly. He opens his notebook. Doesn't write yet. Just holds the pen over the blank page.</p>
+<p class="scene-heading">EXT. COLLEGE COURT — DAWN</p>
+
+  <p class="action">The first light. Nabeel crosses the court with the calligraphy rolled under his arm. He stops in the middle of the courtyard, in the silence, and tilts his face up toward the sky.</p>
+
+  <p class="action">The sky above Cambridge at this hour: not dark, not light. The exact moment between. The daily <em>falaq</em> — the crack of dawn, the splitting of night.</p>
+
+  <p class="action">He stands there for a long time.</p>
+
+  <p class="action">Then goes in.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT V ───────────────────────────────────────── -->
+  <div class="act-header" id="act5">
+    <p class="act-number">Act V</p>
+    <h2 class="act-title">Consult your Heart </h2>
+  </div>
+
+  <!-- SCENE 11 -->
+  <p class="scene-heading first">INT. JUNAYD'S FLAT — EVENING</p>
+
+  <p class="action">Junayd comes through the door with shopping. Sets a can of Coke on the counter.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line">Bro. Why would you get Coke?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">It was on discount.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line">Come on, man. You can do better.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">OK. You don't drink it. I'll have the rest.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line">Why? You don't boycott?</p>
+  </div>
+
+  <p class="action">Junayd pops the can. Takes a sip. Sits down.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">I think it's a distraction.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line">How come?</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">Look — I know where you're coming from. I genuinely care for the children in Gaza. But it's not like me not drinking this Coke will save them. I don't understand this entire boycott thing. So much energy spent, so little impact. Better to use that energy in ways that actually work. Make dua for them — that is something real.</p>
+  </div>
+
+  <p class="action">He holds up the can.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">And it is not haram to drink Coke. <span class="arabic">لِمَ تُحَرِّمُ مَآ أَحَلَّ ٱللَّهُ لَكَ</span> — why make haram what Allah has made halal? And why boycott Coke only? Why not boycott Instagram? Why not boycott that HP laptop you're sitting in front of? Why not boycott everything? Where do you draw the line? Also — in the state of Madinah, Muslims and Jews—</p>
+  </div>
+
+  <p class="action">Flatmate raises a hand. The gesture cuts Junayd off cleanly.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line"><span class="arabic">اِسْتَفْتِ قَلْبَكَ</span></p>
+  </div>
+
+  <p class="action">A beat.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Flatmate</p>
+    <p class="line">Consult your heart.</p>
+  </div>
+
+  <p class="action">Junayd holds the can. He doesn't drink from it again. But he doesn't put it down either.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 12 — DREAM -->
+  <p class="scene-heading">INT. JUNAYD'S ROOM — DEEP NIGHT</p>
+
+  <p class="action">Junayd asleep. Still. His face in blue lamplight.</p>
+
+  <div class="dream-sequence">
+    <p class="scene-heading first">INT. DREAM — WHITE SPACE</p>
+
+    <p class="action">No walls. No floor visible. White — the white of overexposed film, the white of something without origin. Silence that has texture.</p>
+
+    <p class="action">A GIRL. Six or seven. Palestinian. She wears the clothes of a child who has been outside in weather she didn't choose. Her face is entirely still — not frightened, not sad. Something older than either.</p>
+
+    <p class="action">She walks toward Junayd with both hands cupped in front of her. Like an offering. Like water she is carrying and doesn't want to spill.</p>
+
+    <p class="action">She stops in front of him. Holds up her hands. He looks down.</p>
+
+    <div class="insert">In her palms: a single brass bullet casing. Spent. Still warm.</div>
+
+    <p class="action">She holds it out to him. He takes it. She looks up at him with eyes that have seen the whole screen and the whole silence — and says, very quietly:</p>
+
+    <div class="dialogue-block">
+      <p class="character">The Girl</p>
+      <p class="line">Thank you.</p>
+    </div>
+<img src="https://raw.githubusercontent.com/sarimgillani12/kernel/main/kernel%20bullet.png" alt="Bullet casing" style="width:100%; margin:1.5rem 0;">
+    <p class="action">The white floods in. The image bleaches out entirely.</p>
+  </div>
+
+  <p class="action">Junayd wakes. His hand is closed into a fist around nothing.</p>
+
+  <p class="action">He sits up in the dark. Doesn't move. The room returns around him slowly — the familiar objects of his real life. The desk. The books. The window. The city, asleep outside.</p>
+
+  <p class="action">He feels as though a genocide was livestreamed directly into his sleep.</p>
+
+  <p class="action">He gets up. Goes to the kitchen.</p>
+
+  <p class="action">On the counter: the can of Coke. He stands in front of the fridge, in the half-light, and stares at it for a long time. The girl's face. The bullet. <em>Thank you.</em></p>
+
+  <p class="action">He stands there. He does not move. He does not drink.</p>
+
+  <p class="transition">LATER —</p>
+
+  <p class="action">The flat, daylight. Junayd in the kitchen again. Getting water.</p>
+
+  <p class="action">He opens the fridge. The can of Coke is still there. The audience holds its breath.</p>
+
+  <p class="action">He reaches in.</p>
+
+  <p class="action">He takes the Coke.</p>
+
+  <p class="action">He drinks it at the counter. Alone. Looking out the window at nothing in particular.</p>
+
+  <p class="action">He finishes it. Sets the empty can down. Looks at his own reflection in the dark window glass.</p>
+
+  <p class="action">His face says: I am still asking the question. I have not resolved it. But I am here.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT VI ───────────────────────────────────────── -->
+  <div class="act-header" id="act6">
+    <p class="act-number">Act VI</p>
+    <h2 class="act-title">Manzil - Destination?</h2>
+  </div>
+
+  <!-- SCENE 13 -->
+  <p class="scene-heading first">INT. CAVENDISH LABORATORY — HUW'S OFFICE — MORNING (10 AM)</p>
+
+  <p class="action">Smaller than authority should require. HUW at his desk. He doesn't offer Nabeel a seat — Nabeel takes one anyway.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">Tell me where you are. Honestly.</p>
+  </div>
+
+  <p class="action">A beat.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">The framework extension — I've made progress.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">Nabeel.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">It's not finished.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">It won't be finished. Not by Friday, not by Christmas. What you're attempting would take another three years and a different kind of evidence than you currently have or can collect. I've been trying to tell you this for six months.</p>
+  </div>
+
+  <p class="action">Nabeel says nothing.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">What you have is a solid, genuinely original contribution on pre-Planck epoch modelling. It's a respectable thesis. You can publish two papers from it. You can get a postdoc. I have calls I can make.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">And the singularity.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">The singularity is a hard limit. You acknowledge it as such in the conclusion, note it as an open problem, and move on. That's not defeat — that's how science works. You work with what you can measure.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I have a new framework. It's not finished but the geometry is right. I can feel it.</p>
+  </div>
+
+  <p class="action">Huw takes off his glasses and sets them on the desk. He is not impatient — he is doing something more unsettling than impatient. He is being careful with Nabeel, the way you are careful with someone standing near a ledge.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">You can <em>feel</em> it.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">The geometry. Yes.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">Submit by Friday midnight. The presentable thesis. Or I defer your candidature and we revisit in October with new funding arrangements. Those are the options I have available to me.</p>
+  </div>
+
+  <p class="action">He picks up his glasses. The meeting is over.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">You're a physicist, Nabeel. A very good one. Work with what you can measure.</p>
+  </div>
+
+  <p class="action">Nabeel stands. Leaves.</p>
+
+  <p class="action">In the corridor outside, he stops and leans against the wall. Looks at his hands. Open. Empty.</p>
+
+  <p class="transition">LATER THAT AFTERNOON —</p>
+
+  <!-- SCENE 14 -->
+  <p class="scene-heading">INT. HUW'S OFFICE — AFTERNOON</p>
+
+  <p class="action">This time Nabeel doesn't sit down.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I'm submitting the framework extension. The full version. Not the safe chapter.</p>
+  </div>
+
+  <p class="action">Huw sets his pen down slowly.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">Nabeel —</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I know it doesn't satisfy the conventional evidential standard. I know the committee will push back. I know you may defer the candidature. I'm still submitting it. Because the safe version presents the boundary as a conclusion, and the boundary isn't the conclusion. It's the beginning of the question. And if this department can't hold that—</p>
+  </div>
+
+  <p class="action">He stops. He is not angry. He is completely calm in a way he has not been for eight months.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">The framework is right. I can't prove it by the usual methods. But it holds. And the geometry at the singularity — the pre-geometric spacetime model — has internal consistency that the standard approach doesn't. I would rather submit something true and incomplete than something tidy and wrong.</p>
+  </div>
+
+  <p class="action">A long silence. Huw looks at him — not the look of someone making a professional calculation. The look of someone remembering something.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">The committee will not pass it as submitted.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I know.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">You'll be asked to revise. It could take another year.</p>
+  </div>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">I know.</p>
+  </div>
+
+  <p class="action">Another silence. Huw picks up his glasses. Puts them on. Something passes across his face that is private.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="line">Have it submitted by midnight.</p>
+  </div>
+
+  <p class="action">Nabeel nods. Turns to leave.</p>
+
+  <div class="dialogue-block">
+    <p class="character">Huw</p>
+    <p class="parenthetical">(quietly, not quite at Nabeel's back)</p>
+    <p class="line">Dirac was told his first major paper was unprovable.</p>
+  </div>
+
+  <p class="action">Nabeel doesn't turn around. He nods once — almost to himself — and goes.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- ── ACT VII ──────────────────────────────────────── -->
+  <div class="act-header" id="act7">
+    <p class="act-number">Act VII</p>
+    <h2 class="act-title">Khudi - Self</h2>
+  </div>
+
+  <!-- SCENE 15 -->
+  <p class="scene-heading first">INT. CAVENDISH LABORATORY — DATA ANALYSIS ROOM — NIGHT TO MIDNIGHT</p>
+
+  <p class="action">Nabeel is writing. Not the careful, measured writing of the previous months — this has a different velocity. The kind that comes when you stop protecting yourself and simply go.</p>
+
+  <p class="action">On his desk: the framed calligraphy propped beside the monitor. The CMB on the screen — the ancient sky. The oldest light.</p>
+
+  <p class="action">He writes. He draws diagrams. He crosses things out and rewrites them better. He works through the night with a focus that is different from all the months before — not the closed, grinding focus of someone trapped, but the open, fast focus of someone who has finally decided where they're going.</p>
+
+  <p class="action">Hours pass.</p>
+
+  <div class="insert">Clock on screen: 11:38 PM.</div>
+  <div class="insert">11:51.</div>
+  <div class="insert">11:58.</div>
+
+  <p class="action">At 11:59 PM, he stops.</p>
+
+  <p class="action">He looks at the document. Reads the final paragraph. Looks at the CMB — the amber and blue of the universe's first breath, the singularity that stands at the edge of everything we can know.</p>
+
+  <p class="action">He looks at the calligraphy. Traces the letter with one finger. <em>Falaq.</em></p>
+
+  <p class="action">He hits submit.</p>
+
+  <p class="action">The screen returns a confirmation. He closes his laptop.</p>
+
+  <p class="action">He sits in the dark room. The CMB gone now. Just his reflection in the black glass of the monitor. Him and the darkness, which is not empty.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- SCENE 16 -->
+  <p class="scene-heading">EXT. COLLEGE COURT — DAWN</p>
+
+  <p class="action">The first light. Nabeel crosses the court with the calligraphy rolled under his arm. He stops in the middle, in the silence, and tilts his face up toward the sky.</p>
+
+  <p class="action">The sky above Cambridge at this hour: not dark, not light. The exact moment between. The daily <em>falaq</em> — the crack of dawn, the splitting of night.</p>
+
+  <p class="action">He stands there for a long time.</p>
+
+  <p class="action">He looks at his phone.</p>
+
+  <p class="action">BABA. Three missed calls.</p>
+
+  <p class="action">He presses call.</p>
+
+  <p class="action">It rings. Twice. Then:</p>
+
+  <p class="action">Nabeel closes his eyes. Breathes. A Tear sheds through his eyes</p>
+
+  <div class="dialogue-block">
+    <p class="character">Nabeel</p>
+    <p class="line">Baba</p>
+  </div>
+
+  <p class="action">Nabeel holds the phone with both hands. The sky above him keeps splitting — the way it always has, the way it always will.</p>
+
+  <p class="transition">CUT TO:</p>
+
+  <!-- FINAL SCENE -->
+  <p class="scene-heading">EXT. CAMBRIDGE — PALESTINE MARCH — DAY</p>
+
+  <p class="action">A crowd moving through the old streets. Banners. Chanting. Colour against stone. The city, briefly, changed.</p>
+
+  <p class="action">JUNAYD in the march. He holds a sign: BDS. He has not come here by argument. He has come here the way things happen after long internal weather — not decided, but arrived at.</p>
+
+  <p class="action">He moves with the crowd. Then stops.</p>
+
+  <p class="action">Across the street, on the pavement, watching: JAMES. Alone. Not marching. Not walking away.</p>
+
+  <p class="action">Their eyes meet.</p>
+
+  <p class="action">A beat. Junayd raises his chin — a greeting, an invitation, a recognition. <em>Come. Or don't. But you are not invisible to me.</em></p>
+
+  <p class="action">James looks at him. His jaw tight. Something moving in his face.</p>
+
+  <p class="action">Junayd calls across the gap between them:</p>
+
+  <div class="dialogue-block">
+    <p class="character">Junayd</p>
+    <p class="line">James.</p>
+  </div>
+
+  <p class="action">A long beat. The march continues around Junayd, the city continues around James.</p>
+
+  <p class="action">Then James — quietly, at a distance, in a voice that has something new in it — answers:</p>
+
+  <div class="dialogue-block">
+    <p class="character">James</p>
+    <p class="line">Yaqoob.</p>
+  </div>
+
+  <p class="action">HOLD on Junayd's face — something breaks open in it, gently.</p>
+
+  <p class="action">The crowd moves. The two of them: still.</p>
+
+  <p class="action">FADE TO BLACK.</p>
+
+  <div class="title-card">
+    "Proof comes after insight, not before."
+    <cite>— M. Rafiuddin, <em>The Philosophy of Iqbal</em>, 1960</cite>
+  </div>
+
+  <div class="spacer"></div>
+
+</article>
+</div>
+
+<!-- END PAGE -->
+<section class="end-page" id="end">
+  <div class="end-rule"></div>
+  <h2 class="end-title">The End</h2>
+  <blockquote class="end-quote">
+    "Proof comes after insight, not before."
+    <cite>— M. Rafiuddin</cite>
+  </blockquote>
+</section>
+
+</body>
+</html>
